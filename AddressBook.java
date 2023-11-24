@@ -102,6 +102,31 @@ class Contact {
     public String getEmail() {
         return email;
     }
+    
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public void setZip(String zip) {
+        this.zip = zip;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
 
 	/*
 	 * @desc: to return in string format
@@ -134,7 +159,7 @@ class Address{
 	 * @params:Object Contact
 	 * @return:none
 	 */
-    public void addAddress(Contact contact){
+    public void addContact(Contact contact){
         contacts.add(contact);
         System.out.println("Contact added successfully");
     
@@ -157,6 +182,74 @@ class Address{
         }
         }  
     }
+    
+    
+    public Contact findContactByName(String firstName, String lastName) {
+        for (Contact contact : contacts) {
+            if (contact.getFname().equalsIgnoreCase(firstName) && contact.getLname().equalsIgnoreCase(lastName)) {
+                return contact;
+            }
+        }
+        return null; // Contact not found
+    }
+   
+
+    public void editExistingContact(Scanner scanner) {
+        System.out.print("Enter the first name of the contact to edit: ");
+        String firstNameToEdit = scanner.nextLine();
+
+        System.out.print("Enter the last name of the contact to edit: ");
+        String lastNameToEdit = scanner.nextLine();
+
+        Contact existingContact = findContactByName(firstNameToEdit, lastNameToEdit);
+
+        if (existingContact != null) {
+            System.out.println("Existing Contact Details:");
+            System.out.println(existingContact);
+            boolean updateMore = true;
+            while (updateMore) {
+            // Get updated information
+            System.out.println("Enter the information to update (address/city/state/zip/phone/email): ");
+            String infoToUpdate = scanner.nextLine();   
+            switch (infoToUpdate.toLowerCase()) {
+                case "address":
+                    System.out.print("Enter updated address: ");
+                    existingContact.setAddress(scanner.nextLine());
+                    break;
+                case "city":
+                    System.out.print("Enter updated city: ");
+                    existingContact.setCity(scanner.nextLine());
+                    break;
+                case "state":
+                    System.out.print("Enter updated state: ");
+                    existingContact.setState(scanner.nextLine());
+                    break;
+                case "zip":
+                    System.out.print("Enter updated ZIP Code: ");
+                    existingContact.setZip(scanner.nextLine());
+                    break;
+                case "phone":
+                    System.out.print("Enter updated phone number: ");
+                    existingContact.setPhone(scanner.nextLine());
+                    break;
+                case "email":
+                    System.out.print("Enter updated email: ");
+                    existingContact.setEmail(scanner.nextLine());
+                    break;
+                default:
+                    System.out.println("Invalid information type. No updates performed.");
+            }
+
+            System.out.print("Do you want to update anything more for this contact? (yes/no): ");
+            String updateMoreOption = scanner.nextLine();
+            updateMore = updateMoreOption.equalsIgnoreCase("yes");
+        }
+
+            System.out.println("Contact updated successfully");
+        } else {
+            System.out.println("Contact not found");
+        }
+    }
 }
 
 
@@ -171,11 +264,15 @@ public class AddressBook {
 	 */
 	public static void main(String []args) {
 		System.out.println("WELCOME TO ADDRESS BOOK!!");
+		
 
 		        Address address = new Address();
 
 		        Scanner scanner = new Scanner(System.in);
+		        
+		        boolean addMoreContacts = true;
 
+		        while (addMoreContacts) {
 		        System.out.print("Enter first name: ");
 		        String fname = scanner.nextLine();
 
@@ -200,9 +297,27 @@ public class AddressBook {
 		        System.out.print("Enter email: ");
 		        String email = scanner.nextLine();
 		        
-		        Contact newContact = new  Contact(fname, lname, addressStr, city, state, zip, phone, email);
-		        address.addAddress(newContact);
+		        Contact newContact = new Contact(fname, lname, addressStr, city, state, zip, phone, email);
+		        address.addContact(newContact);
+
+	            System.out.print("Do you want to add another contact? (yes/no): ");
+	            String addAnother = scanner.nextLine();
+
+	            addMoreContacts = addAnother.equalsIgnoreCase("yes");
+		        }
+
+		        // Option to edit an existing contact
+		        System.out.print("Do you want to edit an existing contact? (yes/no): ");
+		        String editOption = scanner.nextLine();
+
+		        if (editOption.equalsIgnoreCase("yes")) {
+		            address.editExistingContact(scanner);
+		        }
+
 		        address.display();
-		    }
+		        scanner.close();
+	}
+ 
+
 	}
 
