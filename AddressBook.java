@@ -103,26 +103,58 @@ class Contact {
         return email;
     }
     
+    
+	/*
+	 * @desc: to SET info
+	 * @params:STRING(from user)
+	 * @return:none
+	 */
     public void setAddress(String address) {
         this.address = address;
     }
-
+    
+	/*
+	 * @desc: to SET info
+	 * @params:STRING(from user)
+	 * @return:none
+	 */
     public void setCity(String city) {
         this.city = city;
     }
-
+    
+	/*
+	 * @desc: to SET info
+	 * @params:STRING(from user)
+	 * @return:none
+	 */
     public void setState(String state) {
         this.state = state;
     }
-
+    
+	/*
+	 * @desc: to SET info
+	 * @params:STRING(from user)
+	 * @return:none
+	 */
     public void setZip(String zip) {
         this.zip = zip;
     }
-
+    
+    
+	/*
+	 * @desc: to SET info
+	 * @params:STRING(from user)
+	 * @return:none
+	 */
     public void setPhone(String phone) {
         this.phone = phone;
     }
-
+    
+	/*
+	 * @desc: to SET info
+	 * @params:STRING(from user)
+	 * @return:none
+	 */
     public void setEmail(String email) {
         this.email = email;
     }
@@ -143,9 +175,10 @@ class Contact {
 
 
 
-/*@desc:stores the contacts in arrayList and displays it
+/*@desc:Class representing the entire address book.
 @params:ArrayList(Contacts)
-@methods:non-parameterized contstructor, getFname, getLname,getAddress,getCity, getState */
+@methods:non-parameterized contstructor, display, addContact,findContact, editContact, addContact,deleteContact
+*/
 class Address{
 
     private ArrayList<Contact> contacts;
@@ -183,7 +216,11 @@ class Address{
         }  
     }
     
-    
+	/*
+	 * @desc:Finds a contact in the address book by first name and last name.
+	 * @params:String
+	 * @return:Object
+	 */
     public Contact findContactByName(String firstName, String lastName) {
         for (Contact contact : contacts) {
             if (contact.getFname().equalsIgnoreCase(firstName) && contact.getLname().equalsIgnoreCase(lastName)) {
@@ -193,7 +230,11 @@ class Address{
         return null; // Contact not found
     }
    
-
+	/*
+	 * @desc:Edits an existing contact's information based on user input.
+	 * @params:Scanner
+	 * @return:none
+	 */
     public void editExistingContact(Scanner scanner) {
         System.out.print("Enter the first name of the contact to edit: ");
         String firstNameToEdit = scanner.nextLine();
@@ -250,10 +291,33 @@ class Address{
             System.out.println("Contact not found");
         }
     }
+    
+    
+	/*
+	 * @desc:Deletes a contact from the address book by first name and last name.
+	 * @params:Scanner
+	 * @retrun:none
+	 */
+    public void deleteContactByName(Scanner scanner) {
+        System.out.print("Enter the first name of the contact to delete: ");
+        String firstNameToDelete = scanner.nextLine();
+
+        System.out.print("Enter the last name of the contact to delete: ");
+        String lastNameToDelete = scanner.nextLine();
+
+        Contact contactToRemove = findContactByName(firstNameToDelete, lastNameToDelete);
+
+        if (contactToRemove != null) {
+            contacts.remove(contactToRemove);
+            System.out.println("Contact deleted successfully");
+        } else {
+            System.out.println("Contact not found. Deletion failed.");
+        }
+    }
 }
 
 
-/*@desc:the base class originally*/
+/*@desc:Main class representing the Address Book program.*/
 public class AddressBook {
 	
 	
@@ -312,6 +376,15 @@ public class AddressBook {
 
 		        if (editOption.equalsIgnoreCase("yes")) {
 		            address.editExistingContact(scanner);
+		        }
+                
+		        
+		        // Option to delete an existing contact
+		        System.out.print("Do you want to delete an existing contact? (yes/no): ");
+		        String deleteOption = scanner.nextLine();
+
+		        if (deleteOption.equalsIgnoreCase("yes")) {
+		            address.deleteContactByName(scanner);
 		        }
 
 		        address.display();
